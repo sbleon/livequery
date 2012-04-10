@@ -1,5 +1,9 @@
 # Live Query ChangeLog
 
+## 1.2
+
+* Removed overloads which duplicate jQuery's native [$.live](http://api.jquery.com/live/)
+
 ## 1.1.1
 
 * Compatibility fix with 1.4.1 (thanks)
