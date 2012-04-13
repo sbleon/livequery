@@ -76,9 +76,7 @@ $.livequery.prototype = {
 
 		if (this.fn2)
 			// Call the second function for all matched elements
-			this.elements.each(function(i, el) {
-				query.fn2.apply(el);
-			});
+			this.elements.each(query.fn2);
 
 		// Clear out matched elements
 		this.elements = [];
@@ -189,9 +187,7 @@ $.extend($.livequery, {
 			$.livequery.queries[ id ].stop();
 		else
 			// Stop all Live Queries
-			$.each( $.livequery.queries, function(id) {
-				$.livequery.queries[ id ].stop();
-			});
+			$.each( $.livequery.queries, $.livequery.prototype.stop);
 	}
 });
 
