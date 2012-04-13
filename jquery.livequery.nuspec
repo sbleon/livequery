@@ -20,5 +20,6 @@ Live Query is Dual licensed under the MIT (http://www.opensource.org/licenses/mi
   </metadata>
   <files>
     <file src="jquery.livequery.js" target="content\Scripts\jquery.livequery.js" />
+    <file src="jquery.livequery.min.js" target="content\Scripts\jquery.livequery.min.js" />
   </files>
 </package>
