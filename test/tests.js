@@ -23,5 +23,12 @@
 			ok(q1called, "stop called for first query");
 			ok(q2called, "stop called for second query");
 		});
+
+		test("Should call fn", function() {
+			var called = false;
+			$('div').livequery(function (){ called = true; });
+			
+			ok(called, "fn called for the query");
+		});
 	});
 })(jQuery);

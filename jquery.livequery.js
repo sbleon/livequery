@@ -97,14 +97,11 @@ $.livequery.prototype = {
 		// Set elements to the latest set of matched elements
 		this.elements = els;
 
-		
 		// Call the first function for newly matched elements
-		nEls.each(function() {
-			query.fn.apply(this);
-		});
+		nEls.each(query.fn);
 
 		// Call the second function for elements no longer matched
-		if ( this.fn2 && oEls.length > 0 )
+		if ( this.fn2 && oEls.length )
 			$.each(oEls, function(i, el) {
 				if ( $.inArray(el, els) < 0 )
 					query.fn2.apply(el);
