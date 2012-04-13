@@ -11,18 +11,18 @@
 
 $.extend($.fn, {
 	livequery: function(fn, fn2) {
-		var self = this, q;
+		var me = this, q;
 
 		// See if Live Query already exists
 		$.each( $.livequery.queries, function(i, query) {
-			if ( self.selector == query.selector && self.context == query.context &&
+			if ( me.selector == query.selector && me.context == query.context &&
 				(!fn || fn.$lqguid == query.fn.$lqguid) && (!fn2 || fn2.$lqguid == query.fn2.$lqguid) )
 					// Found the query, exit the each loop
 					return (q = query) && false;
 		});
 
 		// Create new Live Query if it wasn't found
-		q = q || new $.livequery(this.selector, this.context, fn, fn2);
+		q = q || new $.livequery(me.selector, me.context, fn, fn2);
 
 		// Make sure it is running
 		q.stopped = false;
@@ -31,81 +31,81 @@ $.extend($.fn, {
 		q.run();
 
 		// Contnue the chain
-		return this;
+		return me;
 	},
 
 	expire: function(fn, fn2) {
-		var self = this;
+		var me = this;
 
 		// Find the Live Query based on arguments and stop it
 		$.each( $.livequery.queries, function(i, query) {
-			if ( self.selector == query.selector && self.context == query.context &&
-				(!fn || fn.$lqguid == query.fn.$lqguid) && (!fn2 || fn2.$lqguid == query.fn2.$lqguid) && !this.stopped )
+			if ( me.selector == query.selector && me.context == query.context &&
+				(!fn || fn.$lqguid == query.fn.$lqguid) && (!fn2 || fn2.$lqguid == query.fn2.$lqguid) && !me.stopped )
 					$.livequery.stop(query.id);
 		});
 
 		// Continue the chain
-		return this;
+		return me;
 	}
 });
 
 $.livequery = function(selector, context, fn, fn2) {
-	this.selector = selector;
-	this.context  = context;
-	this.fn       = fn;
-	this.fn2      = fn2;
-	this.elements = [];
-	this.stopped  = false;
+	var me = this;
+
+	me.selector = selector;
+	me.context  = context;
+	me.fn       = fn;
+	me.fn2      = fn2;
+	me.elements = $([]);
+	me.stopped  = false;
 
 	// The id is the index of the Live Query in $.livequery.queries
-	this.id = $.livequery.queries.push(this)-1;
+	me.id = $.livequery.queries.push(me)-1;
 
 	// Mark the functions for matching later on
 	fn.$lqguid = fn.$lqguid || $.livequery.guid++;
 	if (fn2) fn2.$lqguid = fn2.$lqguid || $.livequery.guid++;
 
 	// Return the Live Query
-	return this;
+	return me;
 };
 
 $.livequery.prototype = {
 	stop: function() {
+		var me = this;
 		// Short-circuit if stopped
-		if ( this.stopped ) return;
-		var query = this;
+		if ( me.stopped ) return;
 
-		if (this.fn2)
+		if (me.fn2)
 			// Call the second function for all matched elements
-			this.elements.each(query.fn2);
+			me.elements.each(me.fn2);
 
 		// Clear out matched elements
-		this.elements = [];
+		me.elements = $([]);
 
 		// Stop the Live Query from running until restarted
-		this.stopped = true;
+		me.stopped = true;
 	},
 
 	run: function() {
+		var me = this;
 		// Short-circuit if stopped
-		if ( this.stopped ) return;
-		var query = this;
+		if ( me.stopped ) return;		
 
-		var oEls = this.elements,
-			els  = $(this.selector, this.context),
-			nEls = els.not(oEls);
+		var oEls = me.elements,
+			els  = $(me.selector, me.context),
+			newEls = els.not(oEls),
+			delEls = oEls.not(els);
 
 		// Set elements to the latest set of matched elements
-		this.elements = els;
+		me.elements = els;
 
 		// Call the first function for newly matched elements
-		nEls.each(query.fn);
+		newEls.each(me.fn);
 
 		// Call the second function for elements no longer matched
-		if ( this.fn2 && oEls.length )
-			$.each(oEls, function(i, el) {
-				if ( $.inArray(el, els) < 0 )
-					query.fn2.apply(el);
-			});
+		if ( me.fn2 )
+			delEls.each(me.fn2);
 	}
 };
 
