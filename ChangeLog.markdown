@@ -1,5 +1,10 @@
 # Live Query ChangeLog
 
+## 1.3
+
+* Fix bug which prevented to stop live queries if there was any already stopped queries.
+* Refactoring
+
 ## 1.2
 
 * Removed overloads which duplicate jQuery's native [$.live](http://api.jquery.com/live/)
