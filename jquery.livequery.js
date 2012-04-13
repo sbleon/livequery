@@ -70,6 +70,8 @@ $.livequery = function(selector, context, fn, fn2) {
 
 $.livequery.prototype = {
 	stop: function() {
+		// Short-circuit if stopped
+		if ( this.stopped ) return;
 		var query = this;
 
 		if (this.fn2)
