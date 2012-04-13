@@ -2,7 +2,7 @@
  * Dual licensed under the MIT (MIT_LICENSE.txt)
  * and GPL Version 2 (GPL_LICENSE.txt) licenses.
  *
- * Version: 1.3
+ * Version: 1.3.1
  * Requires jQuery 1.3+
  * Docs: http://docs.jquery.com/Plugins/livequery
  */
@@ -14,7 +14,7 @@ $.extend($.fn, {
 		var me = this, q;
 
 		// See if Live Query already exists
-		$.each( $.livequery.queries, function(i, query) {
+		$.each( $jQlq.queries, function(i, query) {
 			if ( me.selector == query.selector && me.context == query.context &&
 				(!fn || fn.$lqguid == query.fn.$lqguid) && (!fn2 || fn2.$lqguid == query.fn2.$lqguid) )
 					// Found the query, exit the each loop
@@ -22,7 +22,7 @@ $.extend($.fn, {
 		});
 
 		// Create new Live Query if it wasn't found
-		q = q || new $.livequery(me.selector, me.context, fn, fn2);
+		q = q || new $jQlq(me.selector, me.context, fn, fn2);
 
 		// Make sure it is running
 		q.stopped = false;
@@ -38,10 +38,10 @@ $.extend($.fn, {
 		var me = this;
 
 		// Find the Live Query based on arguments and stop it
-		$.each( $.livequery.queries, function(i, query) {
+		$.each( $jQlq.queries, function(i, query) {
 			if ( me.selector == query.selector && me.context == query.context &&
 				(!fn || fn.$lqguid == query.fn.$lqguid) && (!fn2 || fn2.$lqguid == query.fn2.$lqguid) && !me.stopped )
-					$.livequery.stop(query.id);
+					$jQlq.stop(query.id);
 		});
 
 		// Continue the chain
@@ -49,7 +49,7 @@ $.extend($.fn, {
 	}
 });
 
-$.livequery = function(selector, context, fn, fn2) {
+var $jQlq = $.livequery = function(selector, context, fn, fn2) {
 	var me = this;
 
 	me.selector = selector;
@@ -59,18 +59,18 @@ $.livequery = function(selector, context, fn, fn2) {
 	me.elements = $([]);
 	me.stopped  = false;
 
-	// The id is the index of the Live Query in $.livequery.queries
-	me.id = $.livequery.queries.push(me)-1;
+	// The id is the index of the Live Query in $.livequiery.queries
+	me.id = $jQlq.queries.push(me)-1;
 
 	// Mark the functions for matching later on
-	fn.$lqguid = fn.$lqguid || $.livequery.guid++;
-	if (fn2) fn2.$lqguid = fn2.$lqguid || $.livequery.guid++;
+	fn.$lqguid = fn.$lqguid || $jQlq.guid++;
+	if (fn2) fn2.$lqguid = fn2.$lqguid || $jQlq.guid++;
 
 	// Return the Live Query
 	return me;
 };
 
-$.livequery.prototype = {
+$jQlq.prototype = {
 	stop: function() {
 		var me = this;
 		// Short-circuit if stopped
@@ -90,7 +90,7 @@ $.livequery.prototype = {
 	run: function() {
 		var me = this;
 		// Short-circuit if stopped
-		if ( me.stopped ) return;		
+		if ( me.stopped ) return;
 
 		var oEls = me.elements,
 			els  = $(me.selector, me.context),
@@ -109,7 +109,7 @@ $.livequery.prototype = {
 	}
 };
 
-$.extend($.livequery, {
+$.extend($jQlq, {
 	guid: 0,
 	queries: [],
 	queue: [],
@@ -117,24 +117,24 @@ $.extend($.livequery, {
 	timeout: null,
 
 	checkQueue: function() {
-		if ( $.livequery.running && $.livequery.queue.length ) {
-			var length = $.livequery.queue.length;
+		if ( $jQlq.running && $jQlq.queue.length ) {
+			var length = $jQlq.queue.length;
 			// Run each Live Query currently in the queue
 			while ( length-- )
-				$.livequery.queries[ $.livequery.queue.shift() ].run();
+				$jQlq.queries[ $jQlq.queue.shift() ].run();
 		}
 	},
 
 	pause: function() {
 		// Don't run anymore Live Queries until restarted
-		$.livequery.running = false;
+		$jQlq.running = false;
 	},
 
 	play: function() {
 		// Restart Live Queries
-		$.livequery.running = true;
+		$jQlq.running = true;
 		// Request a run of the Live Queries
-		$.livequery.run();
+		$jQlq.run();
 	},
 
 	registerPlugin: function() {
@@ -151,7 +151,7 @@ $.extend($.livequery, {
 				var r = old.apply(this, arguments);
 
 				// Request a run of the Live Queries
-				$.livequery.run();
+				$jQlq.run();
 
 				// Return the original methods result
 				return r;
@@ -162,36 +162,36 @@ $.extend($.livequery, {
 	run: function(id) {
 		if (id != undefined) {
 			// Put the particular Live Query in the queue if it doesn't already exist
-			if ( $.inArray(id, $.livequery.queue) < 0 )
-				$.livequery.queue.push( id );
+			if ( $.inArray(id, $jQlq.queue) < 0 )
+				$jQlq.queue.push( id );
 		}
 		else
 			// Put each Live Query in the queue if it doesn't already exist
-			$.each( $.livequery.queries, function(id) {
-				if ( $.inArray(id, $.livequery.queue) < 0 )
-					$.livequery.queue.push( id );
+			$.each( $jQlq.queries, function(id) {
+				if ( $.inArray(id, $jQlq.queue) < 0 )
+					$jQlq.queue.push( id );
 			});
 
 		// Clear timeout if it already exists
-		if ($.livequery.timeout) clearTimeout($.livequery.timeout);
+		if ($jQlq.timeout) clearTimeout($jQlq.timeout);
 		// Create a timeout to check the queue and actually run the Live Queries
-		$.livequery.timeout = setTimeout($.livequery.checkQueue, 20);
+		$jQlq.timeout = setTimeout($jQlq.checkQueue, 20);
 	},
 
 	stop: function(id) {
 		if (id != undefined)
 			// Stop are particular Live Query
-			$.livequery.queries[ id ].stop();
+			$jQlq.queries[ id ].stop();
 		else
 			// Stop all Live Queries
-			$.each( $.livequery.queries, $.livequery.prototype.stop);
+			$.each( $jQlq.queries, $jQlq.prototype.stop);
 	}
 });
 
 // Register core DOM manipulation methods
-$.livequery.registerPlugin('append', 'prepend', 'after', 'before', 'wrap', 'attr', 'removeAttr', 'addClass', 'removeClass', 'toggleClass', 'empty', 'remove', 'html', 'prop', 'removeProp');
+$jQlq.registerPlugin('append', 'prepend', 'after', 'before', 'wrap', 'attr', 'removeAttr', 'addClass', 'removeClass', 'toggleClass', 'empty', 'remove', 'html', 'prop', 'removeProp');
 
 // Run Live Queries when the Document is ready
-$(function() { $.livequery.play(); });
+$(function() { $jQlq.play(); });
 
 })(jQuery);
