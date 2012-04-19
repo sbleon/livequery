@@ -1,4 +1,6 @@
-Copyright 2010, Brandon Aaron (http://brandonaaron.net/)
+Copyright 
+  (c) 2010, Brandon Aaron (http://brandonaaron.net/)
+  (c) 2012, Alexander Zaytsev (http://hazzik.ru/en)
  
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <version>1.3.1</version>
-    <authors>Brandon Aaron,hazzik</authors>
+    <authors>Brandon Aaron, hazzik</authors>
     <owners>hazzik</owners>
     <projectUrl>http://github.com/hazzik/livequery</projectUrl>
     <dependencies>

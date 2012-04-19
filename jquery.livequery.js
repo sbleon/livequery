@@ -1,4 +1,6 @@
-/*! Copyright (c) 2010 Brandon Aaron (http://brandonaaron.net)
+/*! Copyright 
+ *  (c) 2010, Brandon Aaron (http://brandonaaron.net)
+ *  (c) 2012, Alexander Zaytsev (http://hazzik.ru/en)
  * Dual licensed under the MIT (MIT_LICENSE.txt)
  * and GPL Version 2 (GPL_LICENSE.txt) licenses.
  *
