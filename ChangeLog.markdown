@@ -1,8 +1,11 @@
 # Live Query ChangeLog
 
+## 1.3.1
+* Performance improvements and reduced size of minified version.
+
 ## 1.3
 
-* Fix bug which prevented to stop live queries if there was any already stopped queries.
+* Fix bug which prevented to stop live queries if there was any already stopped query.
 * Refactoring
 
 ## 1.2
