@@ -9,7 +9,14 @@
  * Docs: http://docs.jquery.com/Plugins/livequery
  */
 
-(function($, undefined) {
+(function ($, undefined) {
+
+function _match(me, query, fn, fn2) {
+	return me.selector == query.selector &&
+		me.context == query.context &&
+		(!fn || fn.$lqguid == query.fn.$lqguid) &&
+		(!fn2 || fn2.$lqguid == query.fn2.$lqguid);
+}
 
 $.extend($.fn, {
 	livequery: function(fn, fn2) {
@@ -17,8 +24,7 @@ $.extend($.fn, {
 
 		// See if Live Query already exists
 		$.each( $jQlq.queries, function(i, query) {
-			if ( me.selector == query.selector && me.context == query.context &&
-				(!fn || fn.$lqguid == query.fn.$lqguid) && (!fn2 || fn2.$lqguid == query.fn2.$lqguid) )
+			if ( _match(me, query, fn, fn2) )
 					// Found the query, exit the each loop
 					return (q = query) && false;
 		});
@@ -41,8 +47,7 @@ $.extend($.fn, {
 
 		// Find the Live Query based on arguments and stop it
 		$.each( $jQlq.queries, function(i, query) {
-			if ( me.selector == query.selector && me.context == query.context &&
-				(!fn || fn.$lqguid == query.fn.$lqguid) && (!fn2 || fn2.$lqguid == query.fn2.$lqguid) && !me.stopped )
+			if ( _match(me, query, fn, fn2) && !me.stopped)
 					$jQlq.stop(query.id);
 		});
 

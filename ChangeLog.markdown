@@ -1,5 +1,8 @@
 # Live Query ChangeLog
 
+## 1.3.3
+* Extract query match function.
+
 ## 1.3.2
 * Added undefined variable to main IIF function to reduce minified size.
 
