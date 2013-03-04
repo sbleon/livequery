@@ -4,12 +4,12 @@
  * Dual licensed under the MIT (MIT_LICENSE.txt)
  * and GPL Version 2 (GPL_LICENSE.txt) licenses.
  *
- * Version: 1.3.1
+ * Version: 1.3.2
  * Requires jQuery 1.3+
  * Docs: http://docs.jquery.com/Plugins/livequery
  */
 
-(function($) {
+(function($, undefined) {
 
 $.extend($.fn, {
 	livequery: function(fn, fn2) {
