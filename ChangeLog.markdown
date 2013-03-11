@@ -1,5 +1,8 @@
 # Live Query ChangeLog
 
+## vNext
+* Add support for MutationObserver API
+
 ## 1.3.5
 * fix issue #1
 

@@ -195,9 +195,24 @@ $.extend($jQlq, {
 	}
 });
 
-// Register core DOM manipulation methods
-$jQlq.registerPlugin('append', 'prepend', 'after', 'before', 'wrap', 'attr', 'removeAttr', 'addClass', 'removeClass', 'toggleClass', 'empty', 'remove', 'html', 'prop', 'removeProp');
-
+var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+if (MutationObserver) {
+	var _run = function () { $jQlq.run(); };
+	var observer = new MutationObserver(function (mutations) {
+		mutations.forEach(_run);
+	});
+	observer.observe(document, { 
+		attributes: true, 
+		subtree: true,
+		childList: true,
+		characterData: true,
+		attributeOldValue: true,
+		characterDataOldValue: true
+	});
+} else {
+	// Register core DOM manipulation methods
+	$jQlq.registerPlugin('append', 'prepend', 'after', 'before', 'wrap', 'attr', 'removeAttr', 'addClass', 'removeClass', 'toggleClass', 'empty', 'remove', 'html', 'prop', 'removeProp');
+}
 // Run Live Queries when the Document is ready
 $(function() { $jQlq.play(); });
 
