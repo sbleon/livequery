@@ -1,4 +1,4 @@
-/*! Live Query v1.3.4
+/*! Live Query v1.3.5
  *  Copyright
  *  (c) 2010, Brandon Aaron (http://brandonaaron.net)
  *  (c) 2012 - 2013, Alexander Zaytsev (http://hazzik.ru/en)
