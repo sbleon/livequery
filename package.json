@@ -38,7 +38,7 @@
   },
   "bugs": "https://github.com/frankfoerster/livequery/issues",
   "homepage": "https://github.com/frankfoerster/livequery",
-  "docs": "https://github.com/frankfoerster/livequery/blob/master/README.markdown",
+  "docs": "https://github.com/frankfoerster/livequery/blob/master/README.md",
   "download": "https://raw.github.com/frankfoerster/livequery/master/build/jquery.livequery.min.js",
   "dependencies": {
     "jquery": ">=1.3"
