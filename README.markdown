@@ -72,3 +72,4 @@ The Live Query plugin is dual licensed *(just like jQuery)* under the MIT (MIT\_
 
 Copyright (c) 2010 [Brandon Aaron](http://brandonaaron.net)
           (c) 2012 [Alexander Zaytsev](http://hazzik.ru/en)
+          (c) 2013 [Frank Förster](http://frankfoerster.com)
