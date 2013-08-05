@@ -1,196 +1,219 @@
-(function ($, undefined) {
+(function($, undefined) {
 
-function _match(me, query, fn, fn2) {
-	return me.selector == query.selector &&
-		me.context == query.context &&
-		(!fn || fn.$lqguid == query.fn.$lqguid) &&
-		(!fn2 || fn2.$lqguid == query.fn2.$lqguid);
-}
+  function _match(me, query, fn, fn2) {
+    return me.selector == query.selector &&
+      me.context == query.context &&
+      (!fn || fn.$lqguid == query.fn.$lqguid) &&
+      (!fn2 || fn2.$lqguid == query.fn2.$lqguid);
+  }
 
-$.extend($.fn, {
-	livequery: function(fn, fn2) {
-		var me = this, q;
+  $.extend($.fn, {
 
-		// See if Live Query already exists
-		$.each( $jQlq.queries, function(i, query) {
-			if ( _match(me, query, fn, fn2) )
-					// Found the query, exit the each loop
-					return (q = query) && false;
-		});
+    livequery: function(fn, fn2) {
+      var me = this, q;
 
-		// Create new Live Query if it wasn't found
-		q = q || new $jQlq(me.selector, me.context, fn, fn2);
+      // See if Live Query already exists
+      $.each($jQlq.queries, function(i, query) {
+        if (_match(me, query, fn, fn2) ) {
+          // Found the query, exit the each loop
+          return (q = query) && false;
+        }
+      });
 
-		// Make sure it is running
-		q.stopped = false;
+      // Create new Live Query if it wasn't found
+      q = q || new $jQlq(me.selector, me.context, fn, fn2);
 
-		// Run it immediately for the first time
-		q.run();
+      // Make sure it is running
+      q.stopped = false;
 
-		// Contnue the chain
-		return me;
-	},
+      // Run it immediately for the first time
+      q.run();
 
-	expire: function(fn, fn2) {
-		var me = this;
+      // Contnue the chain
+      return me;
+    },
 
-		// Find the Live Query based on arguments and stop it
-		$.each( $jQlq.queries, function(i, query) {
-			if ( _match(me, query, fn, fn2) && !me.stopped)
-					$jQlq.stop(query.id);
-		});
+    expire: function(fn, fn2) {
+      var me = this;
 
-		// Continue the chain
-		return me;
-	}
-});
+      // Find the Live Query based on arguments and stop it
+      $.each($jQlq.queries, function(i, query) {
+        if (_match(me, query, fn, fn2) && !me.stopped) {
+          $jQlq.stop(query.id);
+        }
+      });
 
-var $jQlq = $.livequery = function(selector, context, fn, fn2) {
-	var me = this;
+      // Continue the chain
+      return me;
+    }
 
-	me.selector = selector;
-	me.context  = context;
-	me.fn       = fn;
-	me.fn2      = fn2;
-	me.elements = $([]);
-	me.stopped  = false;
+  });
 
-	// The id is the index of the Live Query in $.livequiery.queries
-	me.id = $jQlq.queries.push(me)-1;
+  var $jQlq = $.livequery = function(selector, context, fn, fn2) {
+    var me = this;
 
-	// Mark the functions for matching later on
-	fn.$lqguid = fn.$lqguid || $jQlq.guid++;
-	if (fn2) fn2.$lqguid = fn2.$lqguid || $jQlq.guid++;
+    me.selector = selector;
+    me.context  = context;
+    me.fn       = fn;
+    me.fn2      = fn2;
+    me.elements = $([]);
+    me.stopped  = false;
 
-	// Return the Live Query
-	return me;
-};
+    // The id is the index of the Live Query in $.livequiery.queries
+    me.id = $jQlq.queries.push(me)-1;
 
-$jQlq.prototype = {
-	stop: function() {
-		var me = this;
-		// Short-circuit if stopped
-		if ( me.stopped ) return;
+    // Mark the functions for matching later on
+    fn.$lqguid = fn.$lqguid || $jQlq.guid++;
+    if (fn2) fn2.$lqguid = fn2.$lqguid || $jQlq.guid++;
 
-		if (me.fn2)
-			// Call the second function for all matched elements
-			me.elements.each(me.fn2);
+    // Return the Live Query
+    return me;
+  };
 
-		// Clear out matched elements
-		me.elements = $([]);
+  $jQlq.prototype = {
 
-		// Stop the Live Query from running until restarted
-		me.stopped = true;
-	},
+    stop: function() {
+      var me = this;
+      // Short-circuit if stopped
+      if (me.stopped) {
+        return;
+      }
 
-	run: function() {
-		var me = this;
-		// Short-circuit if stopped
-		if ( me.stopped ) return;
+      if (me.fn2) {
+        // Call the second function for all matched elements
+        me.elements.each(me.fn2);
+      }
 
-		var oEls = me.elements,
-			els  = $(me.selector, me.context),
-			newEls = els.not(oEls),
-			delEls = oEls.not(els);
+      // Clear out matched elements
+      me.elements = $([]);
 
-		// Set elements to the latest set of matched elements
-		me.elements = els;
+      // Stop the Live Query from running until restarted
+      me.stopped = true;
+    },
 
-		// Call the first function for newly matched elements
-		newEls.each(me.fn);
+    run: function() {
+      var me = this;
+      // Short-circuit if stopped
+      if (me.stopped) {
+        return;
+      }
 
-		// Call the second function for elements no longer matched
-		if ( me.fn2 )
-			delEls.each(me.fn2);
-	}
-};
+      var oEls = me.elements,
+        els  = $(me.selector, me.context),
+        newEls = els.not(oEls),
+        delEls = oEls.not(els);
 
-$.extend($jQlq, {
-	guid: 0,
-	queries: [],
-	queue: [],
-	running: false,
-	timeout: null,
-	registered: [],
+      // Set elements to the latest set of matched elements
+      me.elements = els;
 
-	checkQueue: function() {
-		if ( $jQlq.running && $jQlq.queue.length ) {
-			var length = $jQlq.queue.length;
-			// Run each Live Query currently in the queue
-			while ( length-- )
-				$jQlq.queries[ $jQlq.queue.shift() ].run();
-		}
-	},
+      // Call the first function for newly matched elements
+      newEls.each(me.fn);
 
-	pause: function() {
-		// Don't run anymore Live Queries until restarted
-		$jQlq.running = false;
-	},
+      // Call the second function for elements no longer matched
+      if (me.fn2) {
+        delEls.each(me.fn2);
+      }
+    }
 
-	play: function() {
-		// Restart Live Queries
-		$jQlq.running = true;
-		// Request a run of the Live Queries
-		$jQlq.run();
-	},
+  };
 
-	registerPlugin: function() {
-		$.each( arguments, function(i,n) {
-			// Short-circuit if the method doesn't exist
-			if (!$.fn[n] || $jQlq.registered.indexOf(n) > 0) return;
+  $.extend($jQlq, {
+    guid: 0,
+    queries: [],
+    queue: [],
+    running: false,
+    timeout: null,
+    registered: [],
 
-			// Save a reference to the original method
-			var old = $.fn[n];
+    checkQueue: function() {
+      if ($jQlq.running && $jQlq.queue.length) {
+        var length = $jQlq.queue.length;
+        // Run each Live Query currently in the queue
+        while (length--) {
+          $jQlq.queries[$jQlq.queue.shift()].run();
+        }
+      }
+    },
 
-			// Create a new method
-			$.fn[n] = function() {
-				// Call the original method
-				var r = old.apply(this, arguments);
+    pause: function() {
+      // Don't run anymore Live Queries until restarted
+      $jQlq.running = false;
+    },
 
-				// Request a run of the Live Queries
-				$jQlq.run();
+    play: function() {
+      // Restart Live Queries
+      $jQlq.running = true;
+      // Request a run of the Live Queries
+      $jQlq.run();
+    },
 
-				// Return the original methods result
-				return r;
-			}
+    registerPlugin: function() {
+      $.each(arguments, function(i, n) {
+        // Short-circuit if the method doesn't exist
+        if (!$.fn[n] || $jQlq.registered.indexOf(n) > 0) {
+          return;
+        }
 
-			$jQlq.registered.push(n);
-		});
-	},
+        // Save a reference to the original method
+        var old = $.fn[n];
 
-	run: function(id) {
-		if (id != undefined) {
-			// Put the particular Live Query in the queue if it doesn't already exist
-			if ( $.inArray(id, $jQlq.queue) < 0 )
-				$jQlq.queue.push( id );
-		}
-		else
-			// Put each Live Query in the queue if it doesn't already exist
-			$.each( $jQlq.queries, function(id) {
-				if ( $.inArray(id, $jQlq.queue) < 0 )
-					$jQlq.queue.push( id );
-			});
+        // Create a new method
+        $.fn[n] = function() {
+          // Call the original method
+          var r = old.apply(this, arguments);
 
-		// Clear timeout if it already exists
-		if ($jQlq.timeout) clearTimeout($jQlq.timeout);
-		// Create a timeout to check the queue and actually run the Live Queries
-		$jQlq.timeout = setTimeout($jQlq.checkQueue, 20);
-	},
+          // Request a run of the Live Queries
+          $jQlq.run();
 
-	stop: function(id) {
-		if (id != undefined)
-			// Stop are particular Live Query
-			$jQlq.queries[ id ].stop();
-		else
-			// Stop all Live Queries
-			$.each( $jQlq.queries, $jQlq.prototype.stop);
-	}
-});
+          // Return the original methods result
+          return r;
+        };
 
-// Register core DOM manipulation methods
-$jQlq.registerPlugin('append', 'prepend', 'after', 'before', 'wrap', 'attr', 'removeAttr', 'addClass', 'removeClass', 'toggleClass', 'empty', 'remove', 'html', 'prop', 'removeProp');
+        $jQlq.registered.push(n);
+      });
+    },
 
-// Run Live Queries when the Document is ready
-$(function() { $jQlq.play(); });
+    run: function(id) {
+      if (id != undefined) {
+        // Put the particular Live Query in the queue if it doesn't already exist
+        if ($.inArray(id, $jQlq.queue) < 0) {
+          $jQlq.queue.push(id);
+        }
+      }
+      else
+        // Put each Live Query in the queue if it doesn't already exist
+        $.each($jQlq.queries, function(id) {
+          if ($.inArray(id, $jQlq.queue) < 0) {
+            $jQlq.queue.push(id);
+          }
+        });
+
+      // Clear timeout if it already exists
+      if ($jQlq.timeout) {
+        clearTimeout($jQlq.timeout);
+      }
+      // Create a timeout to check the queue and actually run the Live Queries
+      $jQlq.timeout = setTimeout($jQlq.checkQueue, 20);
+    },
+
+    stop: function(id) {
+      if (id != undefined) {
+        // Stop are particular Live Query
+        $jQlq.queries[id].stop();
+      } else {
+        // Stop all Live Queries
+        $.each($jQlq.queries, $jQlq.prototype.stop);
+      }
+    }
+
+  });
+
+  // Register core DOM manipulation methods
+  $jQlq.registerPlugin('append', 'prepend', 'after', 'before', 'wrap', 'attr', 'removeAttr', 'addClass', 'removeClass', 'toggleClass', 'empty', 'remove', 'html', 'prop', 'removeProp');
+
+  // Run Live Queries when the Document is ready
+  $(function() {
+    $jQlq.play();
+  });
 
 })(jQuery);
