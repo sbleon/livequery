@@ -10,6 +10,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     banner: '/*! <%= pkg.title %> v<%= pkg.version %>\n' +
+            ' *  Copyright\n' +
             ' *  (c) 2010, Brandon Aaron (http://brandonaaron.net)\n'+
             ' *  (c) 2012 - 2013, Alexander Zaytsev (http://hazzik.ru/en)\n' +
             ' *  (c) 2013, Frank Förster (http://frankfoerster.com)\n' +
