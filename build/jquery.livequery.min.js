@@ -1,5 +1,5 @@
 /*!
- * jQuery Live Query v1.3.5
+ * jQuery Live Query v1.3.6
  * https://github.com/frankfoerster/livequery
  *
  * Copyright
