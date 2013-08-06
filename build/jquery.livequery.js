@@ -1,5 +1,8 @@
-/*! Live Query v1.3.5
- *  Copyright
+/*!
+ * jQuery Live Query v1.3.5
+ * https://github.com/frankfoerster/livequery
+ *
+ * Copyright
  *  (c) 2010, Brandon Aaron (http://brandonaaron.net)
  *  (c) 2012 - 2013, Alexander Zaytsev (http://hazzik.ru/en)
  *  (c) 2013, Frank Förster (http://frankfoerster.com)

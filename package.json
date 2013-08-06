@@ -1,6 +1,6 @@
 {
   "name": "livequery",
-  "title": "Live Query",
+  "title": "jQuery Live Query",
   "description": "Live Query utilizes the power of jQuery selectors by firing callbacks for matched elements auto-magically, even after the page has been loaded and the DOM updated.",
   "keywords": [
     "live", "query", "livequery", "new-elements"
