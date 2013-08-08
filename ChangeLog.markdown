@@ -1,5 +1,8 @@
 # Live Query ChangeLog
 
+## 1.3.5
+* fix issue #1
+
 ## 1.3.4
 * Register function interceptors only once.
 
