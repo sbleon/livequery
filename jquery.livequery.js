@@ -4,12 +4,20 @@
  * Dual licensed under the MIT (MIT_LICENSE.txt)
  * and GPL Version 2 (GPL_LICENSE.txt) licenses.
  *
- * Version: 1.3.5
+ * Version: 1.3.6
  * Requires jQuery 1.3+
  * Docs: http://docs.jquery.com/Plugins/livequery
  */
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		define(['jquery'], factory);
+	} else if (typeof exports === 'object') {
+		factory(require('jquery'));
+	} else {
+		factory(jQuery);
+	}
+}(function ($, undefined) {
 
-(function ($, undefined) {
 function _match(me, query, fn, fn2) {
 	return me.selector == query.selector &&
 		me.context == query.context &&
@@ -203,4 +211,4 @@ $jQlq.registerPlugin('append', 'prepend', 'after', 'before', 'wrap', 'attr', 're
 // Run Live Queries when the Document is ready
 $(function() { $jQlq.play(); });
 
-})(jQuery);
+}));
