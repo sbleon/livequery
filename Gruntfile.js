@@ -4,6 +4,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-nuget');
 
   grunt.initConfig({
 
@@ -42,6 +43,15 @@ module.exports = function(grunt) {
         files: {
           'build/jquery.<%= pkg.name %>.min.js': ['<%= concat.build.dest %>']
         }
+      }
+    },
+
+    nuget: {
+      local: {
+        files: [ {
+            src: ['build/**'],
+            dest: 'Content/Scripts/'
+        }]
       }
     },
 
