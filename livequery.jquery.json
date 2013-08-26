@@ -30,7 +30,7 @@
   ],
   "bugs": "https://github.com/hazzik/livequery/issues",
   "homepage": "https://github.com/hazzik/livequery/",
-  "docs": "https://github.com/hazzik/livequery/blob/master/README.markdown",
+  "docs": "https://github.com/hazzik/livequery/blob/master/README.md",
   "download": "https://raw.github.com/hazzik/livequery/master/jquery.livequery.min.js",
   "dependencies": {
     "jquery": ">=1.3"
