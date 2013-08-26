@@ -1,4 +1,4 @@
-/*! jquery.livequery - v1.3.5 - 2013-08-26
+/*! jquery.livequery - v1.3.6 - 2013-08-26
  * Copyright (c)
  *  (c) 2010, Brandon Aaron (http://brandonaaron.net)
  *  (c) 2012 - 2013, Alexander Zaytsev (http://hazzik.ru/en)
