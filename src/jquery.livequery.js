@@ -1,3 +1,4 @@
+var window = this;
 (function (factory) {
 	if (typeof define === 'function' && define.amd) {
 		define(['jquery'], factory);
@@ -7,9 +8,6 @@
 		factory(jQuery);
 	}
 }(function ($, undefined) {
-
-(function ($, window, undefined) {
-
 var DOMSubtreeModified = 'DOMSubtreeModified',
 	DOMNodeInserted = 'DOMNodeInserted',
 	DOMNodeRemoved = 'DOMNodeRemoved',
@@ -236,14 +234,15 @@ if (MutationObserver) {
 					DOMAttrModified, 
 					DOMCharacterDataModified
 				],
-				div = $('<div>');
+				div = $('<div>'),
+				handler = function (evt) {
+					caps[evt.type] = true;
+				};
 
 			for (var i = 0; i < eventTypes.length; i++) {
 				var eventType = eventTypes[i];
 				caps[eventType] = false;
-				div.bind(eventType, function (evt) {
-					caps[evt.type] = true;
-				});
+				div.bind(eventType, handler);
 			}
 
 			div.appendTo(body).attr(body, body).detach().remove();
@@ -279,4 +278,4 @@ if (MutationObserver) {
 // Run Live Queries when the Document is ready
 $(function() { $jQlq.play(); });
 
-})(jQuery, window);
+}));
