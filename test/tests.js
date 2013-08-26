@@ -66,7 +66,7 @@
 			}, 40);
 		});
 
-		asyncTest("Should call fn on attr change", function() {
+		asyncTest("Should call fn on class change", function() {
 			var check = false;
 			$('div.hello').livequery(function() { 
 				check = true; 
@@ -82,7 +82,7 @@
 			}, 40);
 		});
 
-		asyncTest("Should call fn2 on attr change", function() {
+		asyncTest("Should call fn2 on class change", function() {
 			var check = false;
 			$('div.hello').livequery(function () {}, function() { 
 				check = true;
@@ -94,6 +94,41 @@
 
 			setTimeout(function(){
 				div.removeClass('hello');
+				setTimeout(function(){
+					ok(check, "fn2 called when attr changed"); 
+					start();
+				}, 40);
+			}, 40);
+		});
+
+		asyncTest("Should call fn on attr change", function() {
+			var check = false;
+			$('div[data-hello]').livequery(function() { 
+				check = true; 
+			});
+
+			var div = $('<div>').appendTo('body');
+
+			div.attr('data-hello', true);
+
+			setTimeout(function(){
+				ok(check, "fn called when attr changed"); 
+				start();
+			}, 40);
+		});
+
+		asyncTest("Should call fn2 on attr change", function() {
+			var check = false;
+			$('div[data-hello]').livequery(function () {}, function() { 
+				check = true;
+			});
+
+			var div = $('<div>', {
+				"data-hello": "true"
+			}).appendTo('body');
+
+			setTimeout(function(){
+				div.removeAttr('data-hello');
 				setTimeout(function(){
 					ok(check, "fn2 called when attr changed"); 
 					start();
