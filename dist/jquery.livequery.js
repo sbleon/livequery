@@ -1,12 +1,9 @@
-/*! Copyright 
+/*! jquery.livequery - v1.3.5 - 2013-08-26
+ * Copyright (c)
  *  (c) 2010, Brandon Aaron (http://brandonaaron.net)
  *  (c) 2012 - 2013, Alexander Zaytsev (http://hazzik.ru/en)
  * Dual licensed under the MIT (MIT_LICENSE.txt)
  * and GPL Version 2 (GPL_LICENSE.txt) licenses.
- *
- * Version: 1.3.6
- * Requires jQuery 1.3+
- * Docs: http://docs.jquery.com/Plugins/livequery
  */
 (function (factory) {
 	if (typeof define === 'function' && define.amd) {
@@ -170,14 +167,14 @@ $.extend($jQlq, {
 
 				// Return the original methods result
 				return r;
-			}
+			};
 
 			$jQlq.registered.push(n);
 		});
 	},
 
 	run: function(id) {
-		if (id != undefined) {
+		if (id !== undefined) {
 			// Put the particular Live Query in the queue if it doesn't already exist
 			if ( $.inArray(id, $jQlq.queue) < 0 )
 				$jQlq.queue.push( id );
@@ -196,7 +193,7 @@ $.extend($jQlq, {
 	},
 
 	stop: function(id) {
-		if (id != undefined)
+		if (id !== undefined)
 			// Stop are particular Live Query
 			$jQlq.queries[ id ].stop();
 		else
